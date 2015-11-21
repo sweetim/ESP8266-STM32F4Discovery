@@ -181,8 +181,9 @@
         <debug>1</debug>
         <option>
           <name>CCDefines</name>
-          <state>USE_STDPERIPH_DRIVER</state>
           <state>STM32F4XX</state>
+          <state>USE_STDPERIPH_DRIVER</state>
+          <state>USE_USB_OTG_FS</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -314,6 +315,7 @@
           <state>$PROJ_DIR$\inc</state>
           <state>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\inc</state>
           <state>$PROJ_DIR$\..\lib\CMSIS\inc</state>
+          <state>$PROJ_DIR$\..\lib\STM32_USB_Device_Library\inc</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1935,6 +1937,9 @@
     <file>
       <name>$PROJ_DIR$\src\led.c</name>
     </file>
+    <file>
+      <name>$PROJ_DIR$\src\usb_vcp.c</name>
+    </file>
   </group>
   <group>
     <name>EWARM</name>
@@ -2038,6 +2043,42 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_wwdg.c</name>
+      </file>
+    </group>
+    <group>
+      <name>USBDeviceLib</name>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32_USB_Device_Library\src\usb_bsp.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32_USB_Device_Library\src\usb_core.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32_USB_Device_Library\src\usb_dcd.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32_USB_Device_Library\src\usb_dcd_int.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32_USB_Device_Library\src\usbd_cdc_core.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32_USB_Device_Library\src\usbd_cdc_vcp.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32_USB_Device_Library\src\usbd_core.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32_USB_Device_Library\src\usbd_desc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32_USB_Device_Library\src\usbd_ioreq.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32_USB_Device_Library\src\usbd_req.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32_USB_Device_Library\src\usbd_usr.c</name>
       </file>
     </group>
   </group>
