@@ -2115,6 +2115,9 @@
       <name>$PROJ_DIR$\src\led.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\src\uart_2.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\src\usb_vcp.c</name>
     </file>
   </group>

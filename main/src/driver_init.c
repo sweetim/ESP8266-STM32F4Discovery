@@ -4,6 +4,7 @@
 
 #include "led.h"
 #include "usb_vcp.h"
+#include "uart_2.h"
 
 static void init_driver(void);
 
@@ -14,7 +15,7 @@ void driver_init(void)
 
 static void init_driver(void)
 {
-    init_led();
-
     TM_USB_VCP_Init();
+    uart_2_init(115200);
+    led_init();
 }

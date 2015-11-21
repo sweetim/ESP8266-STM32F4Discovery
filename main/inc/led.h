@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-void init_led(void);
+void led_init(void);
 void set_led_blue(bool status);
 void set_led_red(bool status);
 void set_led_orange(bool status);

@@ -11,7 +11,7 @@
 
 static void set_led_pin(GPIO_TypeDef *gpio, uint16_t pin, bool status);
 
-void init_led(void)
+void led_init(void)
 {
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
 
