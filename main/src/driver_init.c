@@ -5,6 +5,8 @@
 #include "led.h"
 #include "usb_vcp.h"
 #include "uart_2.h"
+#include "tim_3.h"
+#include "adc_1.h"
 
 static void init_driver(void);
 
@@ -18,4 +20,6 @@ static void init_driver(void)
     TM_USB_VCP_Init();
     uart_2_init(115200);
     led_init();
+    tim_3_init();
+    adc_1_init();
 }

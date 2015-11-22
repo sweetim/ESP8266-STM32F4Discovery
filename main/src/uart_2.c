@@ -23,9 +23,14 @@ void uart_2_init(uint32_t baudrate)
     config_driver(baudrate);
 }
 
-bool uart_2_data_received(void)
+bool uart_2_is_interupt(void)
 {
     return uart_2_received;
+}
+
+void uart_2_clear_interupt(void)
+{
+    uart_2_received = false;
 }
 
 static void config_hardware(void)

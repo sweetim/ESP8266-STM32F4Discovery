@@ -1935,7 +1935,13 @@
   <group>
     <name>driver</name>
     <file>
+      <name>$PROJ_DIR$\src\adc_1.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\src\led.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\src\tim_3.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\src\uart_2.c</name>
