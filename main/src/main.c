@@ -30,32 +30,21 @@ void main(void)
         if (tim_3_is_interupt()) {
             tim_3_clear_interupt();
 
-            set_led_green(led_status);
-            led_status = !led_status;
-
-            //char *data = "AT+CIPSEND=9\r\n";
-            //uart_2_send((uint8_t *)data, strlen(data));
+            char text[128];
 
             uint16_t temperature = adc_1_get_value();
-
-            char text[128];
             sprintf(text, "%d\r\n", temperature);
-            uart_2_send((uint8_t *)text, strlen(text));
-            //TM_USB_VCP_Puts(text);
+            //uart_2_send((uint8_t *)text, strlen(text));
+            TM_USB_VCP_Puts(text);
+
+            set_led_green(led_status);
+            led_status = !led_status;
         }
 
         if (uart_2_is_interupt()) {
             uart_2_clear_interupt();
 
             int length = uart_2_get(rx_buffer);
-
-            if (rx_buffer[0] == '>') {
-                char data[512];
-                int data_length = sprintf(data, "hello %03d", counter++);
-                //uart_2_send((uint8_t *)data, strlen(data));
-            }
-
-
 
             for (int i = 0; i < length; i++) {
                 TM_USB_VCP_Putc(rx_buffer[i]);
