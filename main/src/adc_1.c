@@ -2,8 +2,7 @@
 
 #include "stm32f4xx_adc.h"
 
-#define ADC_1_PORT          GPIOA
-#define ADC_1_PIN           GPIO_Pin_1
+#include "device_config.h"
 
 static bool adc_complete = false;
 static volatile uint16_t adc_value = 0;

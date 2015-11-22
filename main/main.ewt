@@ -2110,6 +2110,12 @@
     </file>
   </group>
   <group>
+    <name>config</name>
+    <file>
+      <name>$PROJ_DIR$\inc\device_config.h</name>
+    </file>
+  </group>
+  <group>
     <name>driver</name>
     <file>
       <name>$PROJ_DIR$\src\adc_1.c</name>

@@ -10,6 +10,7 @@
 
 uint8_t rx_buffer[512];
 
+
 void main(void)
 {
     bool led_status = false;
@@ -30,11 +31,13 @@ void main(void)
             tim_3_clear_interupt();
 
             char text[128];
-
             uint16_t temperature = adc_1_get_value();
             sprintf(text, "%d\r\n", temperature);
-            //uart_2_send((uint8_t *)text, strlen(text));
+            uart_2_send((uint8_t *)text, strlen(text));
             //TM_USB_VCP_Puts(text);
+
+            //uart_2_dma_tx((uint8_t *)text, strlen(text));
+
 
             set_led_green(led_status);
             led_status = !led_status;

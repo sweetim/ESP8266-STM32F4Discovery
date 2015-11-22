@@ -15,6 +15,7 @@ extern "C" {
 #endif
 
     void USART2_IRQHandler(void);
+    void DMA1_Stream6_IRQHandler(void);
 
 #ifdef __cplusplus
 }

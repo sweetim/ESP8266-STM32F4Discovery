@@ -2,24 +2,22 @@
 
 #include "stm32f4xx_usart.h"
 
-#include "ring_buffer.h"
+#include "device_config.h"
 
-#define UART_2_PORT             GPIOA
-#define UART_2_TX_PIN           GPIO_Pin_2
-#define UART_2_TX_PIN_SOURCE    GPIO_PinSource2
-#define UART_2_RX_PIN           GPIO_Pin_3
-#define UART_2_RX_PIN_SOURCE    GPIO_PinSource3
+#include "ring_buffer.h"
 
 static bool uart_2_received = false;
 static RingBuffer *uart_2_rcv_buffer = 0;
 static RingBuffer *uart_2_tx_buffer = 0;
 
 static void config_hardware_uart_2(void);
+static void config_dma_1(void);
 static void config_driver_uart_2(uint32_t baudrate);
 
 void uart_2_init(uint32_t baudrate)
 {
     config_hardware_uart_2();
+    config_dma_1();
     config_driver_uart_2(baudrate);
 }
 
@@ -47,15 +45,41 @@ int uart_2_get(uint8_t *data)
 
 void uart_2_send(uint8_t *data, uint16_t length)
 {
-    USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
+    DMA_InitTypeDef DMA_InitStructure;
+    DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;
+    DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_Full;
+    DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;
+    DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+    DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+    DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
+    DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&USART2->DR;
+    DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
+    DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+    DMA_InitStructure.DMA_PeripheralInc = DMA_MemoryInc_Enable;
+    DMA_InitStructure.DMA_Priority = DMA_Priority_High;
+    DMA_InitStructure.DMA_Channel = DMA_Channel_4;
 
-    ring_buffer_put(uart_2_tx_buffer, (char *)data, length);
+    //Configure Tx DMA
+    DMA_InitStructure.DMA_BufferSize = length;
+    DMA_InitStructure.DMA_DIR = DMA_DIR_MemoryToPeripheral;
+    DMA_InitStructure.DMA_Memory0BaseAddr =(uint32_t)data;
 
-    USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
+    DMA_Init(DMA1_Stream6, &DMA_InitStructure);
+
+    //DMA_ITConfig(DMA1_Stream6, DMA_IT_TC, ENABLE);
+    DMA_Cmd(DMA1_Stream6, ENABLE);
+    USART_DMACmd(USART2, USART_DMAReq_Tx, ENABLE);
+
+    while (USART_GetFlagStatus(USART2, USART_FLAG_TC) == RESET);
+    while (DMA_GetFlagStatus(DMA1_Stream6, DMA_FLAG_TCIF6)==RESET);
+
+    USART_ClearFlag(USART2, USART_FLAG_TC);
+    DMA_ClearFlag(DMA1_Stream6, DMA_FLAG_TCIF6);
 }
 
 static void config_hardware_uart_2(void)
 {
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
 
     GPIO_InitTypeDef GPIO_InitStructure;
@@ -73,7 +97,20 @@ static void config_hardware_uart_2(void)
     NVIC_InitTypeDef NVIC_InitStructure;
 
     NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = UART_2_IRQ_PRIORITY;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+}
+
+static void config_dma_1(void)
+{
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1, ENABLE);
+
+    NVIC_InitTypeDef NVIC_InitStructure;
+
+    NVIC_InitStructure.NVIC_IRQChannel = DMA1_Stream6_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = DMA_1_IRQ_PRIORITY;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
@@ -106,6 +143,13 @@ static void config_driver_uart_2(uint32_t baudrate)
     USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
 
     USART_Cmd(USART2, ENABLE);
+}
+
+void DMA1_Stream6_IRQHandler(void)
+{
+    if (DMA_GetITStatus(DMA1_Stream6, DMA_FLAG_TCIF6)) {
+        DMA_ClearITPendingBit(DMA1_Stream6, DMA_FLAG_TCIF6);
+    }
 }
 
 //UART 2 interupt handler

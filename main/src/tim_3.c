@@ -4,6 +4,8 @@
 
 #include "stm32f4xx_tim.h"
 
+#include "device_config.h"
+
 static bool tim_3_received = false;
 
 void tim_3_init(void)
@@ -13,7 +15,7 @@ void tim_3_init(void)
     NVIC_InitTypeDef NVIC_InitStructure;
 
     NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = TIM_3_IRQ_PRIORITY;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);

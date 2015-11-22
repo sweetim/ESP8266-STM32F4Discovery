@@ -31,13 +31,7 @@
 #include "usbd_conf.h"
 #include "usb_vcp.h"
 
-#ifndef USB_VCP_NVIC_PRIORITY
-#define USB_VCP_NVIC_PRIORITY			0x01
-#endif
-
-#ifndef USB_VCP_NVIC_SUBPRIORITY
-#define USB_VCP_NVIC_SUBPRIORITY		0x01
-#endif
+#include "device_config.h"
 
 extern USB_OTG_CORE_HANDLE           USB_OTG_dev;
 extern uint32_t USBD_OTG_ISR_Handler(USB_OTG_CORE_HANDLE *pdev);
@@ -141,8 +135,8 @@ void USB_OTG_BSP_EnableInterrupt(USB_OTG_CORE_HANDLE *pdev) {
 #ifdef USE_USB_OTG_FS
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     NVIC_InitStructure.NVIC_IRQChannel = OTG_FS_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = USB_VCP_NVIC_PRIORITY;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = USB_VCP_NVIC_SUBPRIORITY + 2;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = USB_VCP_IRQ_PRIORITY;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 #else

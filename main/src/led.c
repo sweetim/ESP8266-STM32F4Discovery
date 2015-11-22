@@ -3,11 +3,7 @@
 #include "stm32f4xx.h"
 #include "stm32f4xx_gpio.h"
 
-#define LED_PORT GPIOD
-#define LED_GREEN_PIN GPIO_Pin_12
-#define LED_ORANGE_PIN GPIO_Pin_13
-#define LED_RED_PIN GPIO_Pin_14
-#define LED_BLUE_PIN GPIO_Pin_15
+#include "device_config.h"
 
 static void set_led_pin(GPIO_TypeDef *gpio, uint16_t pin, bool status);
 
