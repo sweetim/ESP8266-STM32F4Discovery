@@ -14,13 +14,13 @@ static bool uart_2_received = false;
 static RingBuffer *uart_2_rcv_buffer = 0;
 static RingBuffer *uart_2_tx_buffer = 0;
 
-static void config_hardware(void);
-static void config_driver(uint32_t baudrate);
+static void config_hardware_uart_2(void);
+static void config_driver_uart_2(uint32_t baudrate);
 
 void uart_2_init(uint32_t baudrate)
 {
-    config_hardware();
-    config_driver(baudrate);
+    config_hardware_uart_2();
+    config_driver_uart_2(baudrate);
 }
 
 bool uart_2_is_interupt(void)
@@ -33,7 +33,7 @@ void uart_2_clear_interupt(void)
     uart_2_received = false;
 }
 
-static void config_hardware(void)
+static void config_hardware_uart_2(void)
 {
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
 
@@ -58,7 +58,7 @@ static void config_hardware(void)
     NVIC_Init(&NVIC_InitStructure);
 }
 
-static void config_driver(uint32_t baudrate)
+static void config_driver_uart_2(uint32_t baudrate)
 {
      if (uart_2_rcv_buffer == 0) {
         uart_2_rcv_buffer = ring_buffer_create(512);

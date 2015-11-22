@@ -6,11 +6,21 @@
 #define ADC_1_PIN           GPIO_Pin_1
 
 static bool adc_complete = false;
-static uint16_t adc_value = 0;
+static volatile uint16_t adc_value = 0;
+
+static void config_hardware_adc_1(void);
+static void config_driver_adc_1(void);
 
 void adc_1_init(void)
 {
+    config_hardware_adc_1();
+    config_driver_adc_1();
+}
+
+static void config_hardware_adc_1(void)
+{
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
 
     GPIO_InitTypeDef GPIO_InitStructure;
@@ -22,14 +32,29 @@ void adc_1_init(void)
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
     GPIO_Init(ADC_1_PORT, &GPIO_InitStructure);
 
-    NVIC_InitTypeDef NVIC_InitStructure;
+    DMA_InitTypeDef DMA_InitStructure;
 
-    NVIC_InitStructure.NVIC_IRQChannel = ADC_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 4;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
+    DMA_InitStructure.DMA_Channel = DMA_Channel_0;
+    DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&ADC1->DR;
+    DMA_InitStructure.DMA_Memory0BaseAddr = (uint32_t)&adc_value;
+    DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;
+    DMA_InitStructure.DMA_BufferSize = 1;
+    DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+    DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Disable;
+    DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
+    DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+    DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
+    DMA_InitStructure.DMA_Priority = DMA_Priority_High;
+    DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;
+    DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;
+    DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;
+    DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
+    DMA_Init(DMA2_Stream0, &DMA_InitStructure);
+    DMA_Cmd(DMA2_Stream0, ENABLE);
+}
 
+static void config_driver_adc_1(void)
+{
     ADC_InitTypeDef ADC_InitStructure;
 
     ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;
@@ -50,8 +75,8 @@ void adc_1_init(void)
     ADC_CommonInit(&ADC_CommonInitStructure);
 
     ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 1, ADC_SampleTime_480Cycles);
-    ADC_ITConfig(ADC1, ADC_IT_EOC, ENABLE);
-
+    ADC_DMARequestAfterLastTransferCmd(ADC1, ENABLE);
+    ADC_DMACmd(ADC1, ENABLE);
     ADC_Cmd(ADC1, ENABLE);
 
     ADC_SoftwareStartConv(ADC1);
