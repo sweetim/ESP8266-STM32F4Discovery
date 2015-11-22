@@ -18,7 +18,6 @@ void main(void)
     driver_init();
 
     uint8_t c;
-    uint8_t counter = 0;
     while(true) {
         if (adc_1_is_interupt()) {
             adc_1_clear_interupt();
@@ -35,7 +34,7 @@ void main(void)
             uint16_t temperature = adc_1_get_value();
             sprintf(text, "%d\r\n", temperature);
             //uart_2_send((uint8_t *)text, strlen(text));
-            TM_USB_VCP_Puts(text);
+            //TM_USB_VCP_Puts(text);
 
             set_led_green(led_status);
             led_status = !led_status;

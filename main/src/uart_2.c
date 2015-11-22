@@ -33,6 +33,27 @@ void uart_2_clear_interupt(void)
     uart_2_received = false;
 }
 
+int uart_2_get(uint8_t *data)
+{
+    int length = ring_buffer_queue_length(uart_2_rcv_buffer);
+
+    if (length > 0) {
+        ring_buffer_get(uart_2_rcv_buffer, (char *)data, length);
+        ring_buffer_empty(uart_2_rcv_buffer);
+    }
+
+    return length;
+}
+
+void uart_2_send(uint8_t *data, uint16_t length)
+{
+    USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
+
+    ring_buffer_put(uart_2_tx_buffer, (char *)data, length);
+
+    USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
+}
+
 static void config_hardware_uart_2(void)
 {
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
@@ -85,27 +106,6 @@ static void config_driver_uart_2(uint32_t baudrate)
     USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
 
     USART_Cmd(USART2, ENABLE);
-}
-
-int uart_2_get(uint8_t *data)
-{
-    int length = ring_buffer_queue_length(uart_2_rcv_buffer);
-
-    if (length > 0) {
-        ring_buffer_get(uart_2_rcv_buffer, (char *)data, length);
-        ring_buffer_empty(uart_2_rcv_buffer);
-    }
-
-    return length;
-}
-
-void uart_2_send(uint8_t *data, uint16_t length)
-{
-    USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
-
-    ring_buffer_put(uart_2_tx_buffer, (char *)data, length);
-
-    USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
 }
 
 //UART 2 interupt handler

@@ -2130,7 +2130,7 @@
   <group>
     <name>EWARM</name>
     <file>
-      <name>$PROJ_DIR$\startup_stm32f4xx.s</name>
+      <name>$PROJ_DIR$\startup_stm32f40_41xxx.s</name>
     </file>
   </group>
   <group>
@@ -2145,6 +2145,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_can.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cec.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_crc.c</name>
@@ -2174,10 +2177,22 @@
         <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dma.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dma2d.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dsi.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash_ramfunc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_fmpi2c.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_fsmc.c</name>
@@ -2201,7 +2216,16 @@
         <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_iwdg.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_lptim.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_ltdc.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_pwr.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_qspi.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c</name>
@@ -2213,7 +2237,13 @@
         <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rtc.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_sai.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_sdio.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_spdifrx.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\lib\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_spi.c</name>
